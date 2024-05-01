@@ -1,12 +1,12 @@
-import { LogSnag } from 'logsnag';
-
-const logsnag = new LogSnag({
-	token: process.env.LOGSNAG_TOKEN,
-	project: 'magicsnap',
-});
+import { LogSnag } from '@logsnag/node';
 
 async function sendEmails(env) {
 	try {
+		const logsnag = new LogSnag({
+			token: env.LOGSNAG_TOKEN,
+			project: 'magicsnap',
+		});
+
 		const db = await (
 			await fetch('https://www.magicsnap.org/api/remind', {
 				method: 'POST',
@@ -52,13 +52,15 @@ async function sendEmails(env) {
 						const going = eventsGoing
 							.map(
 								(e) =>
-									`* **${e.name}** at ${new Date(e.date).toLocaleString('en-US', {
+									`* **${e.name}** at ${e.location} on ${new Date(e.date).toLocaleString('en-US', {
 										weekday: 'long',
 										month: 'long',
 										day: 'numeric',
 										hour: 'numeric',
 										minute: 'numeric',
-									})} in ${e.location}`
+									})} \n  - ${e.comments} \n  - [update your availability](http://localhost:8888/update/${e.team}/${e.id}/${
+										member.userId
+									}?hash=${member.hash})`
 							)
 							.join('\n');
 						emailMessage += "\n\n**Events you're attending:**\n" + going;
@@ -68,13 +70,15 @@ async function sendEmails(env) {
 						const maybe = eventsMaybe
 							.map(
 								(e) =>
-									`* **${e.name}** at ${e.date.toLocaleString('en-US', {
+									`* **${e.name}** at ${e.location} on ${new Date(e.date).toLocaleString('en-US', {
 										weekday: 'long',
 										month: 'long',
 										day: 'numeric',
 										hour: 'numeric',
 										minute: 'numeric',
-									})} in ${e.location}`
+									})} \n  - ${e.comments} \n  - [update your availability](http://localhost:8888/update/${e.team}/${e.id}/${
+										member.userId
+									}?hash=${member.hash})`
 							)
 							.join('\n');
 						emailMessage += '\n\n**Events you might be attending:**\n' + maybe;
@@ -84,13 +88,15 @@ async function sendEmails(env) {
 						const notGoing = eventsNotGoing
 							.map(
 								(e) =>
-									`* **${e.name}** at ${e.date.toLocaleString('en-US', {
+									`* **${e.name}** at ${e.location} on ${new Date(e.date).toLocaleString('en-US', {
 										weekday: 'long',
 										month: 'long',
 										day: 'numeric',
 										hour: 'numeric',
 										minute: 'numeric',
-									})} in ${e.location}`
+									})} \n  - ${e.comments} \n  - [update your availability](http://localhost:8888/update/${e.team}/${e.id}/${
+										member.userId
+									}?hash=${member.hash})`
 							)
 							.join('\n');
 						emailMessage += '\n\n**Events you declined:**\n' + notGoing;
@@ -117,7 +123,9 @@ async function sendEmails(env) {
 						body: JSON.stringify({
 							to: member.email,
 							from: 'eventwizard@magicsnap.org',
-							subject: 'Event Reminder for ' + new Date().toDateString(),
+							subject:
+								'Event Reminder for ' +
+								new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }),
 							markdown: emailMessage,
 						}),
 					});
@@ -145,6 +153,7 @@ async function sendEmails(env) {
 			description: error,
 			icon: '🚨',
 		});
+
 		return new Response('Internal Server Error: ' + error, { status: 500 });
 	}
 }

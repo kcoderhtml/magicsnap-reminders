@@ -11,6 +11,6 @@
     "wrangler": "^3.0.0"
   },
   "dependencies": {
-    "logsnag": "^1.0.0"
+    "@logsnag/node": "^1.0.1"
   }
 }
