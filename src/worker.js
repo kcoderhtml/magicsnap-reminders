@@ -1,3 +1,10 @@
+import { LogSnag } from 'logsnag';
+
+const logsnag = new LogSnag({
+	token: process.env.LOGSNAG_TOKEN,
+	project: 'magicsnap',
+});
+
 async function sendEmails(env) {
 	try {
 		const db = await (
@@ -37,7 +44,7 @@ async function sendEmails(env) {
 					// send email to user
 					const message = `Hey ${member.name},\nJust a friendly reminder about your schedule for tomorrow, ${new Date().toLocaleDateString(
 						'en-US',
-						{ weekday: 'long', month: 'long', day: 'numeric' },
+						{ weekday: 'long', month: 'long', day: 'numeric' }
 					)}:`;
 					let emailMessage = message;
 
@@ -51,7 +58,7 @@ async function sendEmails(env) {
 										day: 'numeric',
 										hour: 'numeric',
 										minute: 'numeric',
-									})} in ${e.location}`,
+									})} in ${e.location}`
 							)
 							.join('\n');
 						emailMessage += "\n\n**Events you're attending:**\n" + going;
@@ -67,7 +74,7 @@ async function sendEmails(env) {
 										day: 'numeric',
 										hour: 'numeric',
 										minute: 'numeric',
-									})} in ${e.location}`,
+									})} in ${e.location}`
 							)
 							.join('\n');
 						emailMessage += '\n\n**Events you might be attending:**\n' + maybe;
@@ -83,7 +90,7 @@ async function sendEmails(env) {
 										day: 'numeric',
 										hour: 'numeric',
 										minute: 'numeric',
-									})} in ${e.location}`,
+									})} in ${e.location}`
 							)
 							.join('\n');
 						emailMessage += '\n\n**Events you declined:**\n' + notGoing;
@@ -120,10 +127,24 @@ async function sendEmails(env) {
 					}
 				}
 			}
+
+			await logsnag.track({
+				channel: 'api',
+				event: 'reminder-sent',
+				description: `Sent reminder to ${users.length} users in ${organizations.length} different organizations about ${eventsHappeningToday.length} events happening today`,
+				icon: '📬',
+			});
+
 			return new Response('success', { status: 200 });
 		}
 	} catch (error) {
 		console.error(error);
+		await logsnag.track({
+			channel: 'api',
+			event: 'reminder-error',
+			description: error,
+			icon: '🚨',
+		});
 		return new Response('Internal Server Error: ' + error, { status: 500 });
 	}
 }
