@@ -23,4 +23,4 @@ Please note that these environment variables should be kept secret and not commi
 Contributions are welcome. Please open an issue or submit a pull request if you would like to contribute to the project.
 
 ## License
-This project is licensed under the MIT License.
+This repositories code is licensed with the AGPL-3.0 license and you can view it [here](/LICENSE.md)
