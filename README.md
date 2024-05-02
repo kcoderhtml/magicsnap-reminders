@@ -19,8 +19,8 @@ You need to set up the following environment variables:
 - TOKEN: The token used for authorization when fetching data from the API.
 Please note that these environment variables should be kept secret and not committed to your repository. You can use a .env file to set these variables during development. Make sure to add .env to your .gitignore file to prevent it from being committed.
 
-# Contributing
+## Contributing
 Contributions are welcome. Please open an issue or submit a pull request if you would like to contribute to the project.
 
-# License
+## License
 This project is licensed under the MIT License.
