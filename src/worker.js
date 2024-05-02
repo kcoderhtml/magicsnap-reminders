@@ -58,7 +58,7 @@ async function sendEmails(env) {
 										day: 'numeric',
 										hour: 'numeric',
 										minute: 'numeric',
-									})} \n  - ${e.comments} \n  - [update your availability](http://localhost:8888/update/${e.team}/${e.id}/${
+									})} \n  - ${e.comments} \n  - [update your availability](https://www.magicsnap.org/update/${e.team}/${e.id}/${
 										member.userId
 									}?hash=${member.hash})`
 							)
@@ -76,7 +76,7 @@ async function sendEmails(env) {
 										day: 'numeric',
 										hour: 'numeric',
 										minute: 'numeric',
-									})} \n  - ${e.comments} \n  - [update your availability](http://localhost:8888/update/${e.team}/${e.id}/${
+									})} \n  - ${e.comments} \n  - [update your availability](https://www.magicsnap.org/update/${e.team}/${e.id}/${
 										member.userId
 									}?hash=${member.hash})`
 							)
@@ -94,7 +94,7 @@ async function sendEmails(env) {
 										day: 'numeric',
 										hour: 'numeric',
 										minute: 'numeric',
-									})} \n  - ${e.comments} \n  - [update your availability](http://localhost:8888/update/${e.team}/${e.id}/${
+									})} \n  - ${e.comments} \n  - [update your availability](https://www.magicsnap.org/update/${e.team}/${e.id}/${
 										member.userId
 									}?hash=${member.hash})`
 							)
